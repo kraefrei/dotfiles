@@ -53,6 +53,14 @@ set wildmenu
 set lazyredraw
 set ttyfast             " faster redraw
 set showmatch           " higlight matching parenthesis
+set ai                          " set auto-indenting on for programming
+set smartindent                 " try to be smart about indenting (C-style)
+set vb                          " turn on the "visual bell" - which is much quieter than the "audio blink"
+set nowrap                      " turn off line wrap
+set scrolloff=3                 " show a minimum of a few lines above and below the current
+set sidescrolloff=5             " show some to the sides
+set autochdir                   " automatically change to the directory of the current file
+set noshowmode
 " }}}
 " Searching {{{
 set ignorecase          " ignore case when searching
@@ -65,6 +73,11 @@ set foldnestmax=10      " max 10 depth
 set foldenable          " don't fold files by default on open
 set foldlevelstart=1   " start with fold level of 1
 " }}}zo
+" Backups {{{
+" set backup
+" set backupdir=$HOME/.vim/backup//
+" set directory=$HOME/.vim/tmp//
+" }}}
 " Airline Config {{{
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
