@@ -7,31 +7,40 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
+Plugin 'VundleVim/Vundle.vim'
 Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'vim-airline/vim-airline'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'moll/vim-node'
 Plugin 'jelera/vim-javascript-syntax'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'jaxbot/semantic-highlight.vim'
+" Plugin 'Valloric/YouCompleteMe'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 
 call vundle#end()           
 filetype plugin indent on
 
-" }}}i
+" }}}
 " Colors {{{
 syntax enable           " enable syntax processing
 set background=dark
 colorscheme deep-space
 let g:deepspace_italics = 1
 let g:airline_theme='deep_space'
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_scope_highlight = 1
+let g:cpp_experimental_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+if has('termguicolors')
+    set termguicolors
+endif
 " }}}
 " Spaces & Tabs {{{
-set tabstop=4           " 4 space tab
+set tabstop=2           " 4 space tab
 set expandtab           " use spaces for tabs
-set softtabstop=4       " 4 space tab
-set shiftwidth=4
+set softtabstop=2       " 4 space tab
+set shiftwidth=2
 set modelines=1
 set backspace=indent,eol,start
 set autoindent
@@ -49,7 +58,7 @@ set showmatch           " higlight matching parenthesis
 set ignorecase          " ignore case when searching
 set incsearch           " search as characters are entered
 set hlsearch            " highlight all matches
-" }}}zo
+" }}}
 " Folding {{{
 set foldmethod=indent  " fold based on indent level
 set foldnestmax=10      " max 10 depth
@@ -77,7 +86,7 @@ augroup configgroup
     " autocmd FileType java setlocal noexpandtab
 augroup END
 " }}}
-" Functions {{{o
+" Functions {{{
 
 " toggle between number and relativenumber
 function! ToggleNumber()
@@ -105,5 +114,6 @@ endfunction
 let mapleader="'"
 inoremap jk <esc>
 nnoremap :t :call ToggleNumber()  
+nnoremap :s :SemanticHighlightToggle
 " }}}
 " vim:foldmethod=marker:foldlevel=0
