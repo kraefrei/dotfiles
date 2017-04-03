@@ -1,2 +1,2 @@
-# clockworks
-A repository housing the clock firmware and web server for an IOT clock.
+# profile
+A repository housing personal development preferences, including bash and vim
