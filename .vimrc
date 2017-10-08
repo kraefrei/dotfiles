@@ -15,8 +15,9 @@ Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'moll/vim-node'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'jaxbot/semantic-highlight.vim'
-" Plugin 'Valloric/YouCompleteMe'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'
+Plugin 'tpope/vim-fugitive'
+"Plugin 'vim-latex/vim-latex'
 
 call vundle#end()           
 filetype plugin indent on
@@ -68,23 +69,32 @@ set incsearch           " search as characters are entered
 set hlsearch            " highlight all matches
 " }}}
 " Folding {{{
-set foldmethod=indent  " fold based on indent level
+"set foldmethod=indent  " fold based on indent level
 set foldnestmax=10      " max 10 depth
 set foldenable          " don't fold files by default on open
 set foldlevelstart=1   " start with fold level of 1
 " }}}zo
 " Backups {{{
-" set backup
-" set backupdir=$HOME/.vim/backup//
-" set directory=$HOME/.vim/tmp//
+set backup
+set backupdir=$HOME/.vim/backup//
+set directory=$HOME/.vim/tmp//
 " }}}
 " Airline Config {{{
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
+let g:airline_powerline_fonts = 1
+let g:airline_extensions = ['branch','tabline']
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
 set laststatus=2
 " }}}
 " CtrlP settings {{{
@@ -93,11 +103,11 @@ let g:ctrlp_switch_buffer = 0
 let g:ctrlp_working_path_mode = 0
 " }}}
 " Autogroups {{{
-augroup configgroup
-    autocmd!
-    autocmd VimEnter * highlight clear SignColumn
+" augroup configgroup
+ "    autocmd!
+  "  autocmd VimEnter * highlight clear SignColumn
     " autocmd FileType java setlocal noexpandtab
-augroup END
+" augroup END
 " }}}
 " Functions {{{
 
@@ -126,7 +136,8 @@ endfunction
 " Shortcut Remapping & Leaders{{{
 let mapleader="'"
 inoremap jk <esc>
-nnoremap :t :call ToggleNumber()  
-nnoremap :s :SemanticHighlightToggle
+nnoremap :te :tabedit   
+nnoremap :tf :tabfind   
+nnoremap :tc :tabclose   
 " }}}
 " vim:foldmethod=marker:foldlevel=0
