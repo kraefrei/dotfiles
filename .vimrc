@@ -69,15 +69,10 @@ set incsearch           " search as characters are entered
 set hlsearch            " highlight all matches
 " }}}
 " Folding {{{
-"set foldmethod=indent  " fold based on indent level
 set foldnestmax=10      " max 10 depth
 set foldenable          " don't fold files by default on open
 set foldlevelstart=1   " start with fold level of 1
-" }}}zo
-" Backups {{{
-"set backup
-"set backupdir=$HOME/.vim/backup//
-"set directory=$HOME/.vim/tmp//
+"set foldmethod=indent  " fold based on indent level
 " }}}
 " Lightline Config {{{
 
@@ -101,7 +96,6 @@ let g:lightline = {
   \ }
 function! LightlineReadonly()
   return &readonly ? '' : ''
-  :
 endfunction
 function! LightlineFugitive()
   if exists('*fugitive#head')
@@ -119,6 +113,7 @@ set laststatus=2
 "let g:airline_symbols.paste = 'ρ'
 "let g:airline_symbols.whitespace = 'Ξ'
 " }}}
+" Functions {{{
 " strips trailing whitespace at the end of files. this
 " is called on buffer write in the autogroup above.
 function! <SID>StripTrailingWhitespaces()
@@ -132,10 +127,10 @@ function! <SID>StripTrailingWhitespaces()
 endfunction
 " }}}
 " Shortcut Remapping & Leaders{{{
-let mapleader="\"
+let mapleader="""
 inoremap jk <esc>
 nnoremap :te :tabedit   
 nnoremap :tf :tabfind   
 nnoremap :tc :tabclose   
 " }}}
-"vim:foldmethod=marker:foldlevel=0
+" vim:foldmethod=marker:foldlevel=0
