@@ -9,7 +9,8 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tyrannicaltoucan/vim-deep-space'
-Plugin 'vim-airline/vim-airline'
+Plugin 'itchyny/lightline.vim'
+Plugin 'chriskempson/base16-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'moll/vim-node'
@@ -28,13 +29,12 @@ syntax enable           " enable syntax processing
 set background=dark
 colorscheme deep-space
 let g:deepspace_italics = 1
-let g:airline_theme='deep_space'
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_scope_highlight = 1
 let g:cpp_experimental_template_highlight = 1
 let g:cpp_concepts_highlight = 1
 if has('termguicolors')
-    set termguicolors
+  set termguicolors
 endif
 " }}}
 " Spaces & Tabs {{{
@@ -48,7 +48,7 @@ set autoindent
 " }}}
 " UI Layout {{{
 set number
-set showcmd             " show command in bottom bar
+set noshowmode             " show command in bottom bar
 set cursorline          " highlight current line
 set wildmenu
 set lazyredraw
@@ -75,52 +75,50 @@ set foldenable          " don't fold files by default on open
 set foldlevelstart=1   " start with fold level of 1
 " }}}zo
 " Backups {{{
-set backup
-set backupdir=$HOME/.vim/backup//
-set directory=$HOME/.vim/tmp//
+"set backup
+"set backupdir=$HOME/.vim/backup//
+"set directory=$HOME/.vim/tmp//
 " }}}
-" Airline Config {{{
-let g:airline_powerline_fonts = 1
-let g:airline_extensions = ['branch','tabline']
+" Lightline Config {{{
 
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-" airline symbols
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-set laststatus=2
-" }}}
-" CtrlP settings {{{
-let g:ctrlp_match_window = 'bottom,order:ttb'
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_working_path_mode = 0
-" }}}
-" Autogroups {{{
-" augroup configgroup
- "    autocmd!
-  "  autocmd VimEnter * highlight clear SignColumn
-    " autocmd FileType java setlocal noexpandtab
-" augroup END
-" }}}
-" Functions {{{
-
-" toggle between number and relativenumber
-function! ToggleNumber()
-    if(&relativenumber == 1)
-        set norelativenumber
-        set number
-    else
-        set relativenumber
-    endif
+" lightline symbols
+let g:lightline = {
+  \ 'colorscheme': 'deepspace',
+  \ 'active': {
+  \   'left': [ [ 'mode', 'paste' ],
+  \             [ 'fugitive', 'filename' ],
+  \             [ 'readonly','modified' ] ]
+  \ },
+  \ 'component': {
+  \   'lineinfo': ' %3l:%-2v',
+  \ },
+  \ 'component_function': {
+  \   'readonly': 'LightlineReadonly',
+  \   'fugitive': 'LightlineFugitive'
+  \ },
+  \ 'separator': { 'left': '', 'right': '' },
+  \ 'subseparator': { 'left': '|', 'right': '|' }
+  \ }
+function! LightlineReadonly()
+  return &readonly ? '' : ''
+  :
+endfunction
+function! LightlineFugitive()
+  if exists('*fugitive#head')
+    let branch = fugitive#head()
+    return branch !=# '' ? ' '.branch : ''
+  endif
+  return ''
 endfunction
 
+set showtabline=2
+set laststatus=2
+"let g:airline_symbols.branch = ''
+"let g:airline_symbols.readonly = ''
+"let g:airline_symbols.linenr = ''
+"let g:airline_symbols.paste = 'ρ'
+"let g:airline_symbols.whitespace = 'Ξ'
+" }}}
 " strips trailing whitespace at the end of files. this
 " is called on buffer write in the autogroup above.
 function! <SID>StripTrailingWhitespaces()
@@ -134,10 +132,10 @@ function! <SID>StripTrailingWhitespaces()
 endfunction
 " }}}
 " Shortcut Remapping & Leaders{{{
-let mapleader="'"
+let mapleader="\"
 inoremap jk <esc>
 nnoremap :te :tabedit   
 nnoremap :tf :tabfind   
 nnoremap :tc :tabclose   
 " }}}
-" vim:foldmethod=marker:foldlevel=0
+"vim:foldmethod=marker:foldlevel=0
