@@ -1,7 +1,7 @@
 " Christian Freitas
 " Plugins {{{
-set nocompatible            
-filetype off                  
+set nocompatible
+filetype off
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -10,7 +10,6 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'itchyny/lightline.vim'
-Plugin 'chriskempson/base16-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'moll/vim-node'
@@ -18,9 +17,10 @@ Plugin 'jelera/vim-javascript-syntax'
 Plugin 'jaxbot/semantic-highlight.vim'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 Plugin 'tpope/vim-fugitive'
+Plugin 'taketwo/vim-ros'
 "Plugin 'vim-latex/vim-latex'
 
-call vundle#end()           
+call vundle#end()
 filetype plugin indent on
 
 " }}}
@@ -38,9 +38,9 @@ if has('termguicolors')
 endif
 " }}}
 " Spaces & Tabs {{{
-set tabstop=2           " 4 space tab
+set tabstop=2           " 2 space tab
 set expandtab           " use spaces for tabs
-set softtabstop=2       " 4 space tab
+set softtabstop=2       " 2 space tab
 set shiftwidth=2
 set modelines=1
 set backspace=indent,eol,start
@@ -48,12 +48,13 @@ set autoindent
 " }}}
 " UI Layout {{{
 set number
-set noshowmode             " show command in bottom bar
-set cursorline          " highlight current line
+set noshowmode                  " show command in bottom bar
+set cursorline                  " highlight current line
+set wildmode=longest,list
 set wildmenu
 set lazyredraw
-set ttyfast             " faster redraw
-set showmatch           " higlight matching parenthesis
+set ttyfast                     " faster redraw
+set showmatch                   " higlight matching parenthesis
 set ai                          " set auto-indenting on for programming
 set smartindent                 " try to be smart about indenting (C-style)
 set vb                          " turn on the "visual bell" - which is much quieter than the "audio blink"
@@ -72,7 +73,6 @@ set hlsearch            " highlight all matches
 set foldnestmax=10      " max 10 depth
 set foldenable          " don't fold files by default on open
 set foldlevelstart=1   " start with fold level of 1
-"set foldmethod=indent  " fold based on indent level
 " }}}
 " Lightline Config {{{
 
@@ -81,21 +81,36 @@ let g:lightline = {
   \ 'colorscheme': 'deepspace',
   \ 'active': {
   \   'left': [ [ 'mode', 'paste' ],
-  \             [ 'fugitive', 'filename' ],
-  \             [ 'readonly','modified' ] ]
+  \             [ 'fugitive' ],
+  \             [ 'filename' ] ]
   \ },
   \ 'component': {
   \   'lineinfo': ' %3l:%-2v',
   \ },
   \ 'component_function': {
   \   'readonly': 'LightlineReadonly',
-  \   'fugitive': 'LightlineFugitive'
+  \   'modified': 'LightlineModified',
+  \   'fugitive': 'LightlineFugitive',
+  \   'filename': 'LightlineFilename'
   \ },
-  \ 'separator': { 'left': '', 'right': '' },
-  \ 'subseparator': { 'left': '|', 'right': '|' }
+  \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+  \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" }
   \ }
+let g:lightline.tabline = {
+  \ 'left': [ [ 'tabs' ] ],
+  \ 'right': [ [ 'bufnum' ],['absolutepath'] ] }
+function! LightlineFilename()
+	return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+	      \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft == 'unite' ? unite#get_status_string() :
+	      \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+	      \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
 function! LightlineReadonly()
   return &readonly ? '' : ''
+endfunction
+function! LightlineModified()
+  return &modifiable && &modified ? '+' : ''
 endfunction
 function! LightlineFugitive()
   if exists('*fugitive#head')
@@ -113,6 +128,9 @@ set laststatus=2
 "let g:airline_symbols.paste = 'ρ'
 "let g:airline_symbols.whitespace = 'Ξ'
 " }}}
+" Autocommands {{{
+autocmd FileType c,cpp,java,php,ruby,python autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+" }}}
 " Functions {{{
 " strips trailing whitespace at the end of files. this
 " is called on buffer write in the autogroup above.
@@ -129,8 +147,9 @@ endfunction
 " Shortcut Remapping & Leaders{{{
 let mapleader="""
 inoremap jk <esc>
-nnoremap :te :tabedit   
-nnoremap :tf :tabfind   
-nnoremap :tc :tabclose   
+nnoremap tg gT
+nnoremap :te :tabedit
+nnoremap :tf :tabfind
+nnoremap :tc :tabclose
 " }}}
 " vim:foldmethod=marker:foldlevel=0
