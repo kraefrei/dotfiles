@@ -10,15 +10,12 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'itchyny/lightline.vim'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'moll/vim-node'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'jaxbot/semantic-highlight.vim'
-Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 Plugin 'tpope/vim-fugitive'
 Plugin 'taketwo/vim-ros'
-"Plugin 'vim-latex/vim-latex'
 
 call vundle#end()
 filetype plugin indent on
@@ -28,7 +25,6 @@ filetype plugin indent on
 syntax enable           " enable syntax processing
 set background=dark
 colorscheme deep-space
-let g:deepspace_italics = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_scope_highlight = 1
 let g:cpp_experimental_template_highlight = 1
@@ -63,6 +59,8 @@ set scrolloff=3                 " show a minimum of a few lines above and below 
 set sidescrolloff=5             " show some to the sides
 set autochdir                   " automatically change to the directory of the current file
 set noshowmode
+set splitbelow
+set splitright
 " }}}
 " Searching {{{
 set ignorecase          " ignore case when searching
@@ -98,7 +96,7 @@ let g:lightline = {
   \ }
 let g:lightline.tabline = {
   \ 'left': [ [ 'tabs' ] ],
-  \ 'right': [ [ 'bufnum' ],['absolutepath'] ] }
+  \ 'right': [ [ 'bufnum' ],['relativepath'] ] }
 function! LightlineFilename()
 	return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
 	      \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
@@ -130,6 +128,11 @@ set laststatus=2
 " }}}
 " Autocommands {{{
 autocmd FileType c,cpp,java,php,ruby,python autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * if &nu | set rnu   | endif
+  autocmd BufLeave,FocusLost,InsertEnter   * if &nu | set nornu | endif
+augroup END
 " }}}
 " Functions {{{
 " strips trailing whitespace at the end of files. this
