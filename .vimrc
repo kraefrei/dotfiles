@@ -8,14 +8,18 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'itchyny/lightline.vim'
+Plugin 'tpope/vim-fugitive'
+" Color Schemes
+Plugin 'tyrannicaltoucan/vim-deep-space'
+Plugin 'KeitaNakamura/neodark.vim'
+Plugin 'joshdick/onedark.vim'
+" Syntax Highlighting
+Plugin 'jaxbot/semantic-highlight.vim'
+Plugin 'pangloss/vim-javascript'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'moll/vim-node'
-Plugin 'jelera/vim-javascript-syntax'
-Plugin 'jaxbot/semantic-highlight.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'taketwo/vim-ros'
+"
 
 call vundle#end()
 filetype plugin indent on
@@ -24,14 +28,17 @@ filetype plugin indent on
 " Colors {{{
 syntax enable           " enable syntax processing
 set background=dark
-colorscheme deep-space
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_scope_highlight = 1
 let g:cpp_experimental_template_highlight = 1
 let g:cpp_concepts_highlight = 1
+
+let g:onedark_termcolors = 256
+
 if has('termguicolors')
   set termguicolors
 endif
+colorscheme onedark 
 " }}}
 " Spaces & Tabs {{{
 set tabstop=2           " 2 space tab
@@ -76,9 +83,9 @@ set foldlevelstart=1   " start with fold level of 1
 
 " lightline symbols
 let g:lightline = {
-  \ 'colorscheme': 'deepspace',
+  \ 'colorscheme': 'onedark',
   \ 'active': {
-  \   'left': [ [ 'mode', 'paste' ],
+  \   'left': [ [ 'mode' ],
   \             [ 'fugitive' ],
   \             [ 'filename' ] ]
   \ },
@@ -133,6 +140,21 @@ augroup numbertoggle
   autocmd BufEnter,FocusGained,InsertLeave * if &nu | set rnu   | endif
   autocmd BufLeave,FocusLost,InsertEnter   * if &nu | set nornu | endif
 augroup END
+" onedark.vim override: Don't set a background color when running in a
+" terminal;
+" " just use the terminal's background color
+" " `gui` is the hex color code used in GUI mode/nvim true-color mode
+" " `cterm` is the color code used in 256-color mode
+" " `cterm16` is the color code used in 16-color mode
+if (has("autocmd") && !has("gui_running")) 
+  augroup colorset
+    autocmd!
+    let s:white = { "gui": "#ABB2BF", "cterm": "145", "cterm16" : "7" }
+    autocmd ColorScheme * call onedark#set_highlight("Normal", { "fg": s:white })
+    " `bg` will not be styled since there is no `bg` setting
+  augroup END
+endif
+
 " }}}
 " Functions {{{
 " strips trailing whitespace at the end of files. this

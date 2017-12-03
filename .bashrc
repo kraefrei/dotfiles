@@ -19,7 +19,9 @@ function __set_ps1
   	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$SSH_CONNECTION" ]; then
    		SSH="─[${blue}SSH${white}]"
    	fi
-  	PS1="\n┌─[$green\w$white]${SSH}"'$(__git_ps1)'"\n└─[$purple\h$white]→ "
+  	PS1="\n┌─[$green\w$white]${SSH}"'$(__git_ps1)'"\n└─[$purple\h$white]> "
 }
 __set_ps1
 unset -f __set_ps1
+
+
