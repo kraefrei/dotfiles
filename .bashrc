@@ -23,5 +23,3 @@ function __set_ps1
 }
 __set_ps1
 unset -f __set_ps1
-
-
