@@ -1,0 +1,6 @@
+defscrollback          10000
+activity 'Activity in local window %n'
+defmonitor                    off
+startup_message               off
+backtick 0 30 30 sh -c 'screen -ls | grep --color=no -o "$PPID[^[:space:]]*"'
+caption always "%{= W} %H [%`] %{= w}|%{-} %-Lw%{= b}%n-%f%t%{-}%+Lw %=%C%a %Y-%M-%d"
