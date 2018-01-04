@@ -19,7 +19,7 @@ Plugin 'jaxbot/semantic-highlight.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'moll/vim-node'
-"
+Plugin 'rust-lang/rust.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -39,15 +39,6 @@ endif
 " `gui` is the hex color code used in GUI mode/nvim true-color mode
 " `cterm` is the color code used in 256-color mode
 " `cterm16` is the color code used in 16-color mode
-if (has("autocmd") && !has('termguicolors'))
-  let g:onedark_termcolors = 256
-  augroup colorset
-    autocmd!
-    let s:white = { "gui": "#ABB2BF", "cterm": "145", "cterm16" : "7" }
-    autocmd ColorScheme * call onedark#set_highlight("Normal", { "fg": s:white })
-    " `bg` will not be styled since there is no `bg` setting
-  augroup END
-endif
 colorscheme onedark 
 " }}}
 " Spaces & Tabs {{{
@@ -71,13 +62,15 @@ set showmatch                   " higlight matching parenthesis
 set ai                          " set auto-indenting on for programming
 set smartindent                 " try to be smart about indenting (C-style)
 set vb                          " turn on the "visual bell" - which is much quieter than the "audio blink"
-set nowrap                      " turn off line wrap
+"set nowrap                      " turn off line wrap
 set scrolloff=3                 " show a minimum of a few lines above and below the current
 set sidescrolloff=5             " show some to the sides
 set autochdir                   " automatically change to the directory of the current file
 set noshowmode
 set splitbelow
 set splitright
+set list
+set listchars=trail:-,extends:>,preceds:<
 " }}}
 " Searching {{{
 set ignorecase          " ignore case when searching
@@ -144,12 +137,14 @@ set laststatus=2
 "let g:airline_symbols.whitespace = 'Ξ'
 " }}}
 " Autocommands {{{
-autocmd FileType c,cpp,java,php,ruby,python autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * if &nu | set rnu   | endif
   autocmd BufLeave,FocusLost,InsertEnter   * if &nu | set nornu | endif
 augroup END
+
+autocmd FileType tex autocmd BufEnter <buffer> :setlocal spell spelllang=en_us
 
 " }}}
 " Functions {{{
