@@ -38,7 +38,7 @@ deploy_rust () {
   echo -e "${RED}Deploying ${YELLOW}$3 ${NC}to ${PURPLE}$1${NC}:${GREEN}$2${NC}"
   scp target/arm-unknown-linux-gnueabi/debug/$3 $1:$2
 }
-alias cbpi='cargo build --target=arm-unknown-linux-gnueabi && deploy_rust clockworks@monk /home/monk/bin';
+alias cbpi='cargo build --target=arm-unknown-linux-gnueabi && deploy_rust clockworks@monk /home/clockworks/bin';
 # Add raspberry pi to /etc/hosts
 echo "192.168.0.24 monk" >> /etc/hosts
 source /opt/ros/lunar/setup.sh
